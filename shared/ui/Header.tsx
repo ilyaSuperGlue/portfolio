@@ -250,7 +250,7 @@ const StyleSheet = createStyleSheet({
   },
   textHeader: {
     color: colors.secondary,
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "Poppins_300Light",
     marginRight: 20,
   },

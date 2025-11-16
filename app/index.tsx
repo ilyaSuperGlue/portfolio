@@ -1,19 +1,20 @@
 import { ActivityIndicator, Dimensions, View } from "react-native";
-import { colors } from "./shared/constant/colors";
-import Typography from "./shared/ui/Typography";
-import Header from "./shared/ui/Header";
+import { colors } from "../shared/constant/colors";
+import Typography from "../shared/ui/Typography";
+import Header from "../shared/ui/Header";
 import { SectionList } from "react-native";
-import { useRef } from "react";
-import Main from "./pages/Home/widgets/Main";
-import Profile from "./pages/Home/widgets/Profile";
-import Skill from "./pages/Home/widgets/Skill";
-import Projects from "./pages/Home/widgets/Projects";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Main from "../features/home/Main";
+import Profile from "../features/home/Profile";
+import Skill from "../features/home/Skill";
+import Projects from "../features/home/Projects";
 const { height } = Dimensions.get("window");
-import "./shared/constant/unistyle";
+import "../shared/constant/unistyle";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
-import Contact from "./pages/Home/widgets/Contact";
-import useFontReady from "./shared/lib/useFontReady";
-import { registerRootComponent } from "expo";
+import Contact from "../features/home/Contact";
+import useFontReady from "../shared/lib/useFontReady";
+import { Stack } from "expo-router";
+import webApi from "@/shared/lib/webApi";
 
 //section list
 const sections: iSections[] = [
@@ -21,16 +22,36 @@ const sections: iSections[] = [
   "profile",
   "skills",
   "projects",
+  // "open-sourcery 🪄",
   "contact",
 ];
-export type iSections = "main" | "profile" | "skills" | "projects" | "contact";
+export type iSections =
+  | "main"
+  | "profile"
+  | "skills"
+  | "projects"
+  | "open-sourcery 🪄"
+  | "contact";
 
 function Home() {
+  const [fakeAhLoad, setFakeAhLoad] = useState(true);
+
+  useEffect(() => {
+    const doc = webApi();
+    if (doc != undefined) {
+      doc.title = "Ilyas Abdurahman Yusuf";
+    }
+    //because JS not ready yet
+    setTimeout(() => {
+      setFakeAhLoad(false);
+    }, 0);
+  }, []);
+
   const sectionlistRef = useRef<SectionList>(null);
   const { styles } = useStyles(StyleSheet);
   const { fontReady } = useFontReady();
 
-  const scrollTo = (screenName: iSections) => {
+  const scrollTo = useCallback((screenName: iSections) => {
     if (sectionlistRef?.current) {
       sectionlistRef.current.scrollToLocation({
         itemIndex: 0,
@@ -38,27 +59,35 @@ function Home() {
         animated: true,
       });
     }
-  };
+  }, []);
 
-  if (!fontReady) {
+  if (!fontReady || fakeAhLoad) {
     return (
-      <View
-        style={[styles.container, {
-          justifyContent: "center",
-          alignItems: "center",
-        }]}
-      >
-        <ActivityIndicator size={"large"} animating color={colors.primary} />
-      </View>
+      <>
+        <Stack.Screen
+          options={{ title: "Ilyas abdurahman yusuf", headerShown: false }}
+        />
+        <View
+          style={[
+            styles.container,
+            {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+          ]}
+        >
+          <ActivityIndicator size={"large"} animating color={colors.primary} />
+        </View>
+      </>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Header
-        data={sections.slice(1, sections.length)}
-        onPress={scrollTo}
+      <Stack.Screen
+        options={{ title: "Ilyas abdurahman yusuf", headerShown: false }}
       />
+      <Header data={sections.slice(1, sections.length)} onPress={scrollTo} />
       <SectionList
         ref={sectionlistRef}
         style={styles.sectionContainer}
@@ -87,9 +116,7 @@ function Home() {
                     alignItems: "center",
                   }}
                 >
-                  <Typography>
-                    {item}
-                  </Typography>
+                  <Typography>{item}</Typography>
                 </View>
               );
           }
@@ -116,4 +143,4 @@ const StyleSheet = createStyleSheet({
   },
 });
 
-registerRootComponent(Home);
+export default Home;
