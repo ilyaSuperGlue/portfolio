@@ -8,35 +8,21 @@ const Projects = () => {
   const { styles } = useStyles(StyleSheet);
   return (
     <View style={styles.container}>
-      <Typography
-        type="Poppins_700Bold"
-        style={{ fontSize: 24, marginTop: 30, marginBottom: 22 }}
-      >
+      <Typography type="Poppins_700Bold" style={styles.title}>
         Projects
       </Typography>
       <Typography type="Poppins_500Medium" style={styles.textSection}>
         Checkout some cool projects that i have developed in the past.
       </Typography>
-      <View
-        style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "center",
-          paddingHorizontal: 20,
-        }}
-      >
+      <View style={styles.boxContainer}>
         {portfolio.map((item) => (
           <Animated.View style={styles.box} key={item?.title}>
             <Image source={item?.image} style={styles.img} />
             <View style={styles.textBox}>
-              <Typography type="Poppins_700Bold" style={{ fontSize: 16 }}>
+              <Typography type="Poppins_700Bold" style={styles.textTitle}>
                 {item?.title}
               </Typography>
-              <Typography
-                type="Poppins_400Regular"
-                style={{ fontSize: 14, marginTop: 10 }}
-              >
+              <Typography type="Poppins_400Regular" style={styles.textDesc}>
                 {item?.desc}
               </Typography>
             </View>
@@ -56,11 +42,20 @@ const StyleSheet = createStyleSheet(() => ({
     marginBottom: 100,
   },
   box: {
-    margin: 30,
-    marginHorizontal: 20,
+    margin: {
+      xs: 20,
+      sm: 30,
+    },
+    marginHorizontal: {
+      xs: 0,
+      sm: 20,
+    },
     backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 30,
+    padding: {
+      xs: 20,
+      sm: 30,
+    },
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -69,28 +64,24 @@ const StyleSheet = createStyleSheet(() => ({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    maxWidth: {
+      xs: "100%",
+      sm: "100%",
+      md: "100%",
+      lg: "45%",
+    },
   },
   img: {
-    width: {
-      md: 600,
-      sm: 500,
-      xs: 300,
-      lg: 700,
-      xl: 700,
-      superLarge: 1000,
-      tvLike: 2000,
-    },
+    width: "100%",
     height: {
-      md: 350,
+      xs: 180,
       sm: 350,
-      xs: 200,
       lg: 400,
-      xl: 400,
       superLarge: 800,
       tvLike: 1600,
     },
-    // height: 400,
     resizeMode: "contain",
+    alignSelf: "center",
   },
   textBox: {
     padding: 20,
@@ -125,14 +116,53 @@ const StyleSheet = createStyleSheet(() => ({
   },
   textSection: {
     fontSize: {
-      xs: 19,
+      xs: 16,
       sm: 20,
-      md: 20,
-      lg: 20,
-      xl: 20,
-      superLarge: 20,
     },
-    lineHeight: 30,
-    paddingHorizontal: 20,
+    lineHeight: {
+      xs: 25,
+      sm: 30,
+    },
+    paddingHorizontal: {
+      xs: 0,
+      sm: 20,
+    },
+  },
+  title: {
+    fontSize: {
+      xs: 25,
+      sm: 30,
+    },
+    marginTop: 30,
+    marginBottom: {
+      xs: 10,
+      sm: 22,
+    },
+  },
+  boxContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: {
+      xs: 0,
+      sm: 20,
+    },
+  },
+  textTitle: {
+    fontSize: {
+      xs: 14,
+      sm: 16,
+    },
+  },
+  textDesc: {
+    fontSize: {
+      xs: 12,
+      md: 14,
+    },
+    marginTop: {
+      xs: 5,
+      md: 10,
+    },
   },
 }));

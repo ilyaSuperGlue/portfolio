@@ -14,14 +14,7 @@ const Profile = () => {
   const { styles } = useStyles(StyleSheet);
   return (
     <View style={styles.container}>
-      <Typography
-        type="Poppins_700Bold"
-        style={{
-          fontSize: 30,
-          color: colors.black,
-          marginBottom: 30,
-        }}
-      >
+      <Typography type="Poppins_700Bold" style={styles.title}>
         About Me
       </Typography>
       <View style={styles.sectionRow}>
@@ -65,7 +58,7 @@ const StyleSheet = createStyleSheet((theme) => ({
     width: {
       md: 600,
       sm: 600,
-      xs: 400,
+      xs: 320,
       lg: 800,
       xl: 800,
       superLarge: 800,
@@ -86,18 +79,16 @@ const StyleSheet = createStyleSheet((theme) => ({
   },
   textSection: {
     fontSize: {
-      xs: 19,
+      xs: 18,
       sm: 20,
-      md: 20,
-      lg: 20,
-      xl: 20,
-      superLarge: 20,
     },
-    lineHeight: 30,
+    lineHeight: {
+      xs: 28,
+      sm: 30,
+    },
     maxWidth: {
-      md: 500,
-      sm: 430,
-      xs: 400,
+      xs: 320,
+      sm: 500,
       lg: 1000,
       xl: 1000,
       superLarge: 2000,
@@ -105,5 +96,16 @@ const StyleSheet = createStyleSheet((theme) => ({
     },
     color: colors.black,
     paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: {
+      xs: 25,
+      md: 30,
+    },
+    color: colors.black,
+    marginBottom: {
+      xs: 15,
+      md: 30,
+    },
   },
 }));

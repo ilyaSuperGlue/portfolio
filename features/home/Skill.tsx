@@ -11,10 +11,7 @@ const Skill = () => {
   const { styles } = useStyles(StyleSheet);
   return (
     <View style={styles.container}>
-      <Typography
-        type="Poppins_700Bold"
-        style={{ fontSize: 30, color: colors.black }}
-      >
+      <Typography type="Poppins_700Bold" style={styles.title}>
         Skills
       </Typography>
       <Typography type="Poppins_500Medium" style={styles.textSection}>
@@ -39,18 +36,20 @@ const StyleSheet = createStyleSheet({
   },
   textSection: {
     fontSize: {
-      xs: 19,
+      xs: 16,
       sm: 20,
-      md: 20,
-      lg: 20,
-      xl: 20,
-      superLarge: 20,
     },
-    lineHeight: 30,
+    lineHeight: {
+      xs: 25,
+      sm: 30,
+    },
     maxWidth: 720,
     color: colors.black,
     marginVertical: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: {
+      xs: 0,
+      sm: 20,
+    },
     textAlign: "left",
   },
   skillContainer: {
@@ -67,5 +66,12 @@ const StyleSheet = createStyleSheet({
     },
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    fontSize: {
+      xs: 25,
+      md: 30,
+    },
+    color: colors.black,
   },
 });

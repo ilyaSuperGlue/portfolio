@@ -1,9 +1,6 @@
-import { FlatList, Image, Linking, TouchableOpacity, View } from "react-native";
-import React from "react";
-import Animated, {
-  LightSpeedInLeft,
-  SequencedTransition,
-} from "react-native-reanimated";
+import { Linking, View } from "react-native";
+import React, { useMemo } from "react";
+import Animated, { LightSpeedInLeft } from "react-native-reanimated";
 import { colors } from "@/shared/constant/colors";
 import Typography from "@/shared/ui/Typography";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
@@ -12,23 +9,19 @@ import { useRouter } from "expo-router";
 import Button from "@/shared/ui/Button";
 
 const LibraryCard = ({ item }: { item: TLibrary; index: number }) => {
-  const { styles } = useStyles(StyleSheet);
+  const { styles, breakpoint } = useStyles(StyleSheet);
   const { navigate } = useRouter();
+  const iconSize = useMemo(() => {
+    switch (breakpoint) {
+      case "xs":
+        return 16;
+      default:
+        return 20;
+    }
+  }, [breakpoint]);
   return (
-    <Animated.View
-      key={item.name}
-      style={styles.itemContainer}
-      layout={SequencedTransition}
-    >
-      <Typography
-        style={{
-          fontSize: 16,
-          lineHeight: 20,
-          letterSpacing: 0.8,
-          marginBottom: 5,
-        }}
-        type="Poppins_600SemiBold"
-      >
+    <Animated.View key={item.name} style={styles.itemContainer}>
+      <Typography style={styles.textName} type="Poppins_600SemiBold">
         {item.name}
       </Typography>
       <Typography
@@ -40,19 +33,14 @@ const LibraryCard = ({ item }: { item: TLibrary; index: number }) => {
       >
         "{item.describe}"
       </Typography>
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: 10,
-          flex: 1,
-          justifyContent: "flex-end",
-          gap: 10,
-          marginRight: 10,
-        }}
-      >
+      <View style={styles.btnRow}>
         <Button
           withIcon
-          iconProps={{ name: "logo-github", size: 20, color: colors.black }}
+          iconProps={{
+            name: "logo-github",
+            size: iconSize,
+            color: colors.black,
+          }}
           text="Github"
           style={styles.btnGithub}
           textProps={{
@@ -68,7 +56,7 @@ const LibraryCard = ({ item }: { item: TLibrary; index: number }) => {
           iconProps={{
             name: "code",
             color: colors.white,
-            size: 20,
+            size: iconSize,
             type: "AntDesign",
           }}
           text="Demo"
@@ -88,14 +76,7 @@ const OpenSourcery = () => {
   const { styles } = useStyles(StyleSheet);
   return (
     <View style={styles.container}>
-      <Typography
-        type="Poppins_700Bold"
-        style={{
-          fontSize: 30,
-          color: colors.black,
-          marginBottom: 30,
-        }}
-      >
+      <Typography type="Poppins_700Bold" style={styles.title}>
         Open Source Library
       </Typography>
       <View style={styles.sectionRow}>
@@ -107,14 +88,7 @@ const OpenSourcery = () => {
             Some open source library that i have publish.
           </Typography>
         </Animated.View>
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.wrap}>
           {libraries.map((item, index) => (
             <LibraryCard key={item.name} item={item} index={index} />
           ))}
@@ -126,7 +100,7 @@ const OpenSourcery = () => {
 
 export default OpenSourcery;
 
-const StyleSheet = createStyleSheet((theme) => ({
+const StyleSheet = createStyleSheet(() => ({
   container: {
     justifyContent: "center",
     alignItems: "center",
@@ -156,18 +130,17 @@ const StyleSheet = createStyleSheet((theme) => ({
   },
   textSection: {
     fontSize: {
-      xs: 19,
+      xs: 16,
       sm: 20,
-      md: 20,
-      lg: 20,
-      xl: 20,
-      superLarge: 20,
     },
-    lineHeight: 30,
+    lineHeight: {
+      xs: 24,
+      sm: 30,
+    },
     maxWidth: {
+      xs: 300,
+      sm: 500,
       md: 500,
-      sm: 430,
-      xs: 400,
       lg: 1000,
       xl: 1000,
       superLarge: 2000,
@@ -178,9 +151,9 @@ const StyleSheet = createStyleSheet((theme) => ({
   },
   itemContainer: {
     width: {
+      xs: "85%",
       md: 500,
       sm: 400,
-      xs: 350,
     },
     padding: 10,
     marginVertical: 20,
@@ -194,11 +167,17 @@ const StyleSheet = createStyleSheet((theme) => ({
     shadowRadius: 4.65,
     elevation: 4,
     borderRadius: 5,
-    marginRight: 20,
+    marginRight: {
+      xs: 0,
+      sm: 20,
+    },
   },
   btnLinkedin: {
     backgroundColor: colors.black,
-    width: 140,
+    width: {
+      xs: "100%",
+      sm: 140,
+    },
     height: 40,
     borderRadius: 2,
     shadowColor: "#000",
@@ -211,7 +190,10 @@ const StyleSheet = createStyleSheet((theme) => ({
     elevation: 2,
   },
   btnGithub: {
-    width: 140,
+    width: {
+      xs: "100%",
+      sm: 140,
+    },
     height: 40,
     borderRadius: 2,
     borderWidth: 0,
@@ -224,5 +206,40 @@ const StyleSheet = createStyleSheet((theme) => ({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
+  },
+  title: {
+    fontSize: {
+      xs: 22,
+      md: 30,
+    },
+    color: colors.black,
+    marginBottom: {
+      xs: 5,
+      sm: 30,
+    },
+  },
+  textName: {
+    fontSize: 16,
+    lineHeight: 20,
+    letterSpacing: 0.8,
+    marginBottom: 5,
+  },
+  btnRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 10,
+    flex: 1,
+    justifyContent: "flex-end",
+    gap: 10,
+    marginRight: {
+      xs: 0,
+      sm: 10,
+    },
+  },
+  wrap: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));

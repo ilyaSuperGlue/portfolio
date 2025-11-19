@@ -21,31 +21,35 @@ const Contact = () => {
           style={styles.row}
           entering={LightSpeedInLeft.delay(100)}
         >
-          <Typography
-            type="Poppins_700Bold"
-            style={{ fontSize: 24, marginBottom: 30 }}
-          >
+          <Typography type="Poppins_700Bold" style={styles.title}>
             Get in touch with me
           </Typography>
-          <Typography
-            type="Poppins_500Medium"
-            style={[styles.textSection, { marginTop: 20 }]}
-          >
+          <Typography type="Poppins_500Medium" style={[styles.textSection]}>
             I am Available for Freelance or Fulltime Positions.
           </Typography>
           <Typography type="Poppins_500Medium" style={[styles.textSection]}>
             You can contact me via :
           </Typography>
-          <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Button
               withIcon
               iconProps={{
                 name: "logo-linkedin",
-                color: colors.primary,
+                color: colors.black,
               }}
               text="LinkedIn"
               style={styles.btnLinkedin}
-              textProps={{ style: { color: colors.black } }}
+              textProps={{
+                style: styles.btnText,
+                type: "Poppins_700Bold",
+              }}
               onPress={() =>
                 Linking.openURL(
                   "https://linkedin.com/in/ilyas-abdurahman-yusuf"
@@ -56,12 +60,15 @@ const Contact = () => {
               withIcon
               iconProps={{
                 name: "email-outline",
-                color: colors.primary,
+                color: colors.black,
                 type: "MaterialCommunityIcon",
               }}
               text="Email"
               style={styles.btnLinkedin}
-              textProps={{ style: { color: colors.black } }}
+              textProps={{
+                style: styles.btnText,
+                type: "Poppins_700Bold",
+              }}
               onPress={() => {
                 Linking.openURL(
                   "mailto:ilyasabdurahmanyusuf@gmail.com?subject=" +
@@ -71,22 +78,29 @@ const Contact = () => {
                 );
               }}
             />
+
+            <Button
+              withIcon
+              iconProps={{
+                name: "file-search",
+                color: colors.black,
+                type: "AntDesign",
+              }}
+              text="Checkout My CV"
+              style={[styles.btnLinkedin]}
+              textProps={{
+                style: styles.btnText,
+                type: "Poppins_700Bold",
+              }}
+              onPress={() => Linking.openURL(link.cv)}
+            />
           </View>
-          <Button
-            text="Checkout My CV"
-            style={[styles.btnLinkedin, styles.btnCV]}
-            textProps={{ style: { color: colors.black } }}
-            onPress={() => Linking.openURL(link.cv)}
-          />
         </Animated.View>
         <Animated.View
           style={styles.row}
           entering={LightSpeedInLeft.delay(100)}
         >
-          <Typography
-            type="Poppins_700Bold"
-            style={{ fontSize: 24, marginBottom: 30 }}
-          >
+          <Typography type="Poppins_700Bold" style={styles.title}>
             Send Me a Message
           </Typography>
           <View>
@@ -128,6 +142,7 @@ const Contact = () => {
         style={{
           flexDirection: "row",
           alignItems: "center",
+          marginBottom: 10,
         }}
       >
         <Icon
@@ -152,37 +167,60 @@ export default Contact;
 const StyleSheet = createStyleSheet((theme) => ({
   container: {
     justifyContent: "center",
+    marginTop: {
+      md: 0,
+      lg: 50,
+    },
   },
-
   row: {
     flex: 1,
     minWidth: {
-      md: 600,
-      sm: 400,
-      xs: 350,
+      xs: "100%",
       lg: 992 / 2,
       xl: 1200 / 2,
       superLarge: 2000,
       tvLike: 4000,
     },
-    marginBottom: 100,
+    marginBottom: {
+      xs: 30,
+      sm: 100,
+    },
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   sectionRow: {
     flexWrap: "wrap",
     flexDirection: "row",
-    padding: 20,
+    padding: {
+      xs: 0,
+      sm: 20,
+    },
   },
   textSection: {
-    fontSize: 20,
-    lineHeight: 30,
+    fontSize: {
+      xs: 14,
+      sm: 20,
+    },
+    lineHeight: {
+      xs: 24,
+      sm: 30,
+    },
     color: colors.black,
+    textAlign: "center",
+    marginBottom: 5,
   },
   btnLinkedin: {
-    marginRight: 28,
+    marginRight: {
+      xs: 5,
+      sm: 28,
+    },
     backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: "#999999aa",
-    marginTop: 20,
+    marginTop: {
+      xs: 10,
+      sm: 20,
+    },
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -191,9 +229,16 @@ const StyleSheet = createStyleSheet((theme) => ({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    width: {
+      xs: "100%",
+      md: "48%",
+    },
   },
   textLabel: {
-    fontSize: 20,
+    fontSize: {
+      xs: 16,
+      sm: 20,
+    },
     marginBottom: 10,
   },
   textInput: {
@@ -211,6 +256,10 @@ const StyleSheet = createStyleSheet((theme) => ({
     elevation: 5,
     borderRadius: 5,
     marginBottom: 20,
+    minWidth: {
+      xs: 250,
+      sm: 500,
+    },
   },
   textInputArea: {
     padding: 10,
@@ -231,13 +280,28 @@ const StyleSheet = createStyleSheet((theme) => ({
   },
   btnCV: {
     width: {
-      md: 410,
-      sm: 410,
-      xs: 350,
+      xs: "100%",
       lg: 410,
       xl: 410,
       superLarge: 410,
       tvLike: 410,
     },
+  },
+  title: {
+    fontSize: {
+      xs: 22,
+      md: 30,
+    },
+    color: colors.black,
+    marginBottom: {
+      xs: 10,
+      sm: 30,
+    },
+  },
+  btnText: {
+    color: colors.black,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+    fontSize: 20,
   },
 }));

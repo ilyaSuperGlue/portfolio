@@ -11,7 +11,7 @@ const Main = () => {
   const { styles } = useStyles(StyleSheet);
   return (
     <View style={styles.container}>
-      <View>
+      <View style={{ flexWrap: "wrap" }}>
         <Animated.View entering={LightSpeedInLeft.delay(100)}>
           <Typography type="Poppins_600SemiBold" style={styles.textGreet}>
             Hey, I am
@@ -69,95 +69,94 @@ const StyleSheet = createStyleSheet({
   textGreet: {
     fontSize: {
       xs: 30,
-      sm: 36,
+      sm: 34,
       md: 36,
-      lg: 36,
-      xl: 36,
-      superLarge: 36,
     },
     lineHeight: {
-      xs: 40,
-      sm: 54,
+      xs: 38,
+      sm: 40,
       md: 54,
-      lg: 54,
-      xl: 54,
-      superLarge: 54,
     },
     color: colors.black,
     paddingHorizontal: 20,
+    marginBottom: {
+      xs: 5,
+      sm: 10,
+      md: 0,
+    },
   },
   textName: {
     fontSize: {
-      xs: 40,
-      sm: 48,
+      xs: 30,
+      sm: 34,
       md: 48,
-      lg: 48,
-      xl: 48,
       superLarge: 48,
       tvLike: 60,
     },
     lineHeight: {
-      xs: 55,
-      sm: 72,
+      xs: 38,
+      sm: 40,
       md: 72,
-      lg: 72,
-      xl: 72,
-      superLarge: 72,
       tvLike: 100,
     },
     color: colors.secondary,
     paddingHorizontal: 20,
+    marginBottom: {
+      xs: 5,
+      sm: 10,
+      md: 0,
+    },
   },
   textDesc: {
     fontSize: {
-      xs: 25,
-      sm: 30,
+      xs: 18,
+      sm: 20,
       md: 30,
-      lg: 30,
-      xl: 30,
-      superLarge: 30,
     },
     lineHeight: {
-      xs: 40,
-      sm: 45,
+      xs: 24,
+      sm: 30,
       md: 45,
-      lg: 45,
-      xl: 45,
-      superLarge: 45,
     },
     color: colors.black,
     maxWidth: 850,
     paddingHorizontal: 20,
+    marginBottom: {
+      xs: 5,
+      md: 0,
+    },
   },
   btnContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: {
+      xs: 20,
+      sm: 30,
+      md: 40,
+    },
     marginBottom: 200,
     paddingHorizontal: 20,
   },
   btnLinkedin: {
-    marginLeft: 28,
+    marginLeft: {
+      xs: 10,
+      sm: 12,
+      md: 28,
+    },
     backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: "#999999aa",
     width: {
-      xs: 170,
-      sm: 190,
+      xs: 100,
+      sm: 140,
       md: 190,
-      lg: 190,
-      xl: 190,
-      superLarge: 190,
     },
   },
   btnGithub: {
     width: {
-      xs: 170,
-      sm: 190,
+      xs: 100,
+      sm: 140,
       md: 190,
-      lg: 190,
-      xl: 190,
-      superLarge: 190,
     },
   },
 });

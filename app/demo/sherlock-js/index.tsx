@@ -22,7 +22,6 @@ import { useRouter } from "expo-router";
 import webApi from "@/shared/lib/webApi";
 import Typography from "@/shared/ui/Typography";
 import Animated, {
-  SequencedTransition,
   SlideInLeft,
   SlideOutLeft,
   useAnimatedStyle,
@@ -31,79 +30,7 @@ import Animated, {
 } from "react-native-reanimated";
 Text;
 
-import sherlock, {
-  sites,
-  TSiteKey,
-  SHERLOCK_STATUS,
-} from "@ilyasuperglue/sherlock-js";
-
-const keys = Object.keys(sites) as TSiteKey[];
-
-const SherlockRender = () => {
-  const [text, setText] = useState("");
-  const [data, setData] = useState<
-    {
-      url: string;
-      username: string;
-      status: SHERLOCK_STATUS;
-    }[]
-  >([]);
-
-  const searchUser = useCallback((username: string) => {
-    sherlock({
-      username,
-      timeout_each: 1000,
-      callback_each: (item) => {
-        if (item.status === "CLAIMED") {
-          setData((prev) => [
-            ...prev,
-            {
-              status: item.status,
-              url: item.url,
-              username,
-            },
-          ]);
-        }
-      },
-      type: "ALL",
-    });
-  }, []);
-  return (
-    <View>
-      <Text style={{ fontWeight: "600", fontSize: 20, marginVertical: 10 }}>
-        sherlock-js
-      </Text>
-
-      <View style={{ flexDirection: "row", gap: 8, marginTop: 10 }}>
-        <TextInput
-          value={text}
-          onChangeText={setText}
-          placeholder="username"
-          placeholderTextColor={"#999"}
-          style={{
-            borderWidth: 2,
-            padding: 5,
-            borderColor: "#eaeaeaaa",
-            borderRadius: 5,
-          }}
-        />
-        <Button
-          title="search"
-          color={colors.primary}
-          onPress={() => searchUser(text)}
-        />
-      </View>
-      <FlatList
-        data={data}
-        renderItem={({ item }) => (
-          <Animated.View key={item.username} layout={SequencedTransition}>
-            <Typography>{item.url}</Typography>
-          </Animated.View>
-        )}
-      />
-    </View>
-  );
-};
+import SherlockFeat from "@/features/demo/Sherlock";
 
 const Index = () => {
   const { styles, breakpoint } = useStyles(StyleSheet);
@@ -225,8 +152,13 @@ const Index = () => {
             </Typography>
           </Animated.View>
         )}
+        <Activity name="live" mode={mode === "live" ? "visible" : "hidden"}>
+          <SherlockFeat />
+        </Activity>
         <Activity name="snack" mode={mode === "snack" ? "visible" : "hidden"}>
-          <EmbeddedSnack />
+          <View style={{ marginTop: 20, flex: 1 }}>
+            <EmbeddedSnack />
+          </View>
         </Activity>
       </View>
     </View>

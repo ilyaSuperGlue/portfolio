@@ -20,13 +20,18 @@ import Animated, {
   FadeOutDown,
   FadeOutLeft,
   FadeOutUp,
+  FlipInEasyX,
+  FlipInEasyY,
+  FlipInXDown,
   LightSpeedInLeft,
   LightSpeedInRight,
   LightSpeedOutLeft,
   SlideInLeft,
   SlideOutLeft,
+  ZoomInEasyUp,
+  ZoomInRotate,
 } from "react-native-reanimated";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const { width: DWidth, height: Dheight } = Dimensions.get("window");
 
@@ -43,6 +48,15 @@ export default function Header({ type = "parent", ...props }: IHeader) {
     width: DWidth,
     height: Dheight,
   });
+
+  const defaultIconSize = useMemo(() => {
+    switch (breakpoint) {
+      case "xs":
+        return 12;
+      default:
+        return 20;
+    }
+  }, [breakpoint]);
 
   const closeModal = useCallback(() => setModal(false), []);
   const openModal = useCallback(() => setModal(true), []);
@@ -129,23 +143,16 @@ export default function Header({ type = "parent", ...props }: IHeader) {
           }}
           onPress={closeModal}
         >
-          <Animated.View
+          <Animated.ScrollView
             entering={LightSpeedInLeft}
             exiting={LightSpeedOutLeft}
           >
-            <Pressable
-              style={{
-                height,
-                width: width * 0.65,
-                backgroundColor: colors.white,
-                padding: 40,
-                alignItems: "center",
-              }}
-            >
-              <Image
+            <Pressable style={styles.containerHead(width, height)}>
+              <Animated.Image
                 source={iconUpscale}
                 resizeMode="contain"
-                style={{ height: 140, width: 300 }}
+                style={styles.image}
+                entering={FlipInEasyX.delay(300)}
               />
               <Typography
                 type="Poppins_600SemiBold"
@@ -158,10 +165,10 @@ export default function Header({ type = "parent", ...props }: IHeader) {
               >
                 Ilyas Abdurahman Yusuf
               </Typography>
-              <View style={{ width: "100%", marginTop: 53 }}>
+              <View style={styles.itemContainer}>
                 {props?.data?.map((item, index) => (
                   <Animated.View
-                    entering={LightSpeedInLeft.delay((index + 1) * 100)}
+                    entering={ZoomInRotate.delay((index + 1) * 100)}
                     exiting={LightSpeedOutLeft}
                   >
                     <TouchableOpacity
@@ -170,13 +177,7 @@ export default function Header({ type = "parent", ...props }: IHeader) {
                     >
                       <Typography
                         type="Poppins_400Regular"
-                        style={{
-                          fontSize: 20,
-                          lineHeight: 30,
-                          color: colors.secondary,
-                          textTransform: "capitalize",
-                          marginTop: 40,
-                        }}
+                        style={styles.textItem}
                       >
                         {item}
                       </Typography>
@@ -212,14 +213,11 @@ export default function Header({ type = "parent", ...props }: IHeader) {
                       name="react"
                       type="MaterialCommunityIcon"
                       color={colors.secondary}
-                      size={25}
+                      size={defaultIconSize}
                     />
                     <Typography
                       type="Poppins_300Light"
-                      style={{
-                        marginLeft: 5,
-                        color: colors.black,
-                      }}
+                      style={styles.textPower}
                     >
                       Powered by React Native Web
                     </Typography>
@@ -227,7 +225,7 @@ export default function Header({ type = "parent", ...props }: IHeader) {
                 </Animated.View>
               </View>
             </Pressable>
-          </Animated.View>
+          </Animated.ScrollView>
         </Pressable>
       </Modal>
     </Animated.View>
@@ -267,4 +265,40 @@ const StyleSheet = createStyleSheet({
     resizeMode: "cover",
     marginRight: 16,
   },
+  containerHead: (width, height) => ({
+    width: width * 0.8,
+    backgroundColor: colors.white,
+    padding: {
+      xs: 20,
+      sm: 40,
+    },
+    alignItems: "center",
+    minHeight: height,
+  }),
+  itemContainer: {
+    width: "100%",
+    marginTop: {
+      xs: 10,
+      md: 53,
+    },
+  },
+  textItem: {
+    fontSize: 20,
+    lineHeight: 30,
+    color: colors.secondary,
+    textTransform: "capitalize",
+    marginTop: {
+      xs: 20,
+      sm: 40,
+    },
+  },
+  textPower: {
+    marginLeft: 5,
+    color: colors.black,
+    fontSize: {
+      xs: 10,
+      sm: 16,
+    },
+  },
+  image: { height: 140, width: "90%" },
 });

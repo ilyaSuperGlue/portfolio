@@ -60,13 +60,9 @@ const StyleSheet = createStyleSheet({
     shadowRadius: 3.84,
     elevation: 5,
     width: {
-      xs: 160,
-      sm: 175,
-      md: 175,
-      lg: 175,
-      xl: 175,
-      superLarge: 175,
-      tvLike: 175,
+      xs: "80%",
+      sm: "45%",
+      md: "30%",
     },
   },
 });

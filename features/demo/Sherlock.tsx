@@ -1,8 +1,6 @@
-import sherlock, { SHERLOCK_STATUS, sites } from "@ilyasuperglue/sherlock-js";
 import { useCallback, useState } from "react";
+import { Platform } from "react-native";
 import {
-  Linking,
-  SectionList,
   StyleSheet,
   Text,
   TextInput,
@@ -10,57 +8,15 @@ import {
   View,
 } from "react-native";
 
-const key = Object.keys(sites);
-const sites_length = key.length;
+export default function SherlockFeat() {
+  const [_, setText] = useState("");
 
-interface TData {
-  time: number;
-  url: string;
-  isNSFW?: boolean;
-  status: SHERLOCK_STATUS;
-}
-
-export default function App() {
-  const [loading, setLoading] = useState(false);
-  const [claimed, setClaimed] = useState<TData[]>([]);
-  const [other, setOther] = useState<TData[]>([]);
-
-  const [text, setText] = useState("");
-
-  const searchUser = useCallback(async (username: string) => {
-    try {
-      setClaimed([]);
-      setOther([]);
-      setLoading(true);
-      await sherlock({
-        username,
-        type: "SFW",
-        timeout_each: 1000,
-        callback_each: (site) => {
-          if (site.status === "CLAIMED") {
-            setClaimed((prev) => [...prev, site]);
-          } else {
-            setOther((prev) => [...prev, site]);
-          }
-        },
-      }).finally(() => {
-        setLoading(false);
-      });
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  }, []);
-
-  const onPressLink = useCallback((url: string) => {
-    Linking.openURL(url);
-  }, []);
+  const searchUser = useCallback(() => {}, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sherlock-JS</Text>
       <TextInput
-        editable={!loading}
         placeholder="username"
         style={styles.input}
         onChangeText={setText}
@@ -69,28 +25,21 @@ export default function App() {
       />
       <TouchableOpacity
         style={styles.btnSearch}
-        onPress={() => searchUser(text)}
+        onPress={searchUser}
+        disabled={Platform.OS === "web"}
       >
-        <Text style={{ color: "#fff" }}>
-          {loading
-            ? `Loading (${claimed.length + other.length}/${sites_length})`
-            : "Search"}
-        </Text>
+        <Text style={{ color: "#fff" }}>{"Search"}</Text>
       </TouchableOpacity>
-      <SectionList
-        style={{ marginTop: 20 }}
-        sections={[
-          {
-            data: claimed,
-          },
-          {
-            data: other,
-          },
-        ]}
-        renderItem={({ item }) => (
-          <RenderItem key={item.url} item={item} onPressLink={onPressLink} />
-        )}
-      />
+      <View style={styles.webContainer}>
+        <Text style={{ fontSize: 20, fontWeight: "600" }}>
+          Sorry, sherlock-js currently only supported on server-side and react
+          native
+        </Text>
+        <Text style={{ fontSize: 12, marginTop: 20 }}>
+          sherlock-js on web browser is not supported due to cors issue, (we
+          will add parameters to implement proxy on web soon)
+        </Text>
+      </View>
     </View>
   );
 }
@@ -138,52 +87,10 @@ const styles = StyleSheet.create({
   },
   title: { fontWeight: "600", fontSize: 18, marginTop: 20 },
   time: { fontSize: 12, marginTop: 5 },
+  webContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: 400,
+  },
 });
-
-const RenderItem = ({
-  item,
-  onPressLink,
-}: {
-  item: TData;
-  onPressLink: (url: string) => void;
-}) => {
-  return (
-    <TouchableOpacity
-      key={item.url}
-      disabled={item.status !== "CLAIMED"}
-      onPress={() => onPressLink(item.url)}
-      style={[
-        styles.box,
-        {
-          backgroundColor: item.status === "CLAIMED" ? "#fff" : "#eaeaea",
-        },
-      ]}
-    >
-      <View style={{ flexDirection: "row" }}>
-        <View style={{ flex: 1 }}>
-          <Text
-            style={[
-              styles.text,
-              item.status === "CLAIMED" ? styles.textClaimed : styles.textOther,
-            ]}
-          >
-            {item.isNSFW ? "[NSWF] " : ""}
-            {item.url}
-          </Text>
-          <Text style={styles.time}>{item.time} ms</Text>
-        </View>
-        <Text
-          style={[
-            styles.text,
-            item.status === "CLAIMED" ? styles.textClaimed : styles.textOther,
-            {
-              fontWeight: "800",
-            },
-          ]}
-        >
-          {item.status}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
