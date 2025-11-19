@@ -3,32 +3,23 @@ import {
   Image,
   Modal,
   Pressable,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import Typography from "./Typography";
 import { colors } from "../constant/colors";
 import { iSections } from "@/app";
-import { icon, iconUpscale, ilyas } from "@/assets/images/images";
+import { icon, iconUpscale } from "@/assets/images/images";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import Icon from "./Icon";
 import Animated, {
   FadeInDown,
-  FadeInLeft,
   FadeInUp,
   FadeOutDown,
-  FadeOutLeft,
   FadeOutUp,
   FlipInEasyX,
-  FlipInEasyY,
-  FlipInXDown,
   LightSpeedInLeft,
-  LightSpeedInRight,
   LightSpeedOutLeft,
-  SlideInLeft,
-  SlideOutLeft,
-  ZoomInEasyUp,
   ZoomInRotate,
 } from "react-native-reanimated";
 import { useCallback, useEffect, useMemo, useState } from "react";
