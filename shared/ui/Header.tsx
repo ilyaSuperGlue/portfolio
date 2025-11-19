@@ -198,6 +198,7 @@ export default function Header({ type = "parent", ...props }: IHeader) {
                       justifyContent: "center",
                       alignItems: "center",
                       maxWidth: "100%",
+                      marginTop: 20,
                     }}
                   >
                     <Icon
