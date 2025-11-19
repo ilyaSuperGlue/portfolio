@@ -6,11 +6,9 @@ type AppBreakpoints = typeof breakpoints;
 
 // override library types
 declare module "react-native-unistyles" {
-    export interface UnistylesBreakpoints extends AppBreakpoints {}
+  export interface UnistylesBreakpoints extends AppBreakpoints {}
 }
 
-UnistylesRegistry
-    .addBreakpoints(breakpoints)
-    .addConfig({
-        adaptiveThemes: true,
-    });
+UnistylesRegistry.addBreakpoints(breakpoints).addConfig({
+  adaptiveThemes: true,
+});

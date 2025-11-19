@@ -33,9 +33,10 @@ const { width: DWidth, height: Dheight } = Dimensions.get("window");
 interface IHeader {
   data: iSections[];
   onPress: (screen: iSections) => void;
+  type?: "parent" | "child";
 }
 
-export default function Header(props: IHeader) {
+export default function Header({ type = "parent", ...props }: IHeader) {
   const { styles, breakpoint } = useStyles(StyleSheet);
   const [modal, setModal] = useState(false);
   const [{ width, height }, setDimension] = useState({
@@ -71,7 +72,7 @@ export default function Header(props: IHeader) {
     return (
       <View style={styles.headerContainer}>
         <Animated.View entering={FadeInDown} exiting={FadeOutDown}>
-          <TouchableOpacity onPress={() => onPress("main")}>
+          <TouchableOpacity onPress={() => onPress("home")}>
             <Image source={icon} style={styles.imgIcon} />
           </TouchableOpacity>
         </Animated.View>
@@ -99,14 +100,20 @@ export default function Header(props: IHeader) {
         entering={FadeInUp.delay(100)}
         exiting={FadeOutUp.delay(100)}
       >
-        <TouchableOpacity onPress={openModal}>
-          <Icon
-            type="MaterialCommunityIcon"
-            name="menu"
-            color={colors.secondary}
-            size={60}
-          />
-        </TouchableOpacity>
+        {type === "parent" ? (
+          <TouchableOpacity onPress={openModal}>
+            <Icon
+              type="MaterialCommunityIcon"
+              name="menu"
+              color={colors.secondary}
+              size={60}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => onPress("home")}>
+            <Image source={icon} style={styles.imgIcon} />
+          </TouchableOpacity>
+        )}
       </Animated.View>
       <Modal
         transparent

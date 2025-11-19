@@ -43,7 +43,9 @@
             "./assets/fonts/Poppins_700Bold"
           ]
         }
-      ]
+      ],
+      "expo-router",
+      "expo-web-browser"
     ],
     "experiments": {
       "baseUrl": "src"

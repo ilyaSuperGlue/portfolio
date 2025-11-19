@@ -9,29 +9,31 @@ import Profile from "../features/home/Profile";
 import Skill from "../features/home/Skill";
 import Projects from "../features/home/Projects";
 const { height } = Dimensions.get("window");
-import "../shared/constant/unistyle";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import Contact from "../features/home/Contact";
 import useFontReady from "../shared/lib/useFontReady";
 import { Stack } from "expo-router";
 import webApi from "@/shared/lib/webApi";
+import OpenSourcery from "@/features/home/OpenSourcery";
 
 //section list
 const sections: iSections[] = [
-  "main",
+  "home",
   "profile",
   "skills",
   "projects",
-  // "open-sourcery 🪄",
+  "open-sourcery 🪄",
   "contact",
 ];
 export type iSections =
-  | "main"
+  | "home"
   | "profile"
   | "skills"
   | "projects"
   | "open-sourcery 🪄"
-  | "contact";
+  | "contact"
+  | "sherlock-js"
+  | "react-native-reanimated-confetti";
 
 function Home() {
   const [fakeAhLoad, setFakeAhLoad] = useState(true);
@@ -97,7 +99,7 @@ function Home() {
         }))}
         renderItem={({ item }: { item: iSections }) => {
           switch (item) {
-            case "main":
+            case "home":
               return <Main />;
             case "profile":
               return <Profile />;
@@ -107,6 +109,8 @@ function Home() {
               return <Projects />;
             case "contact":
               return <Contact />;
+            case "open-sourcery 🪄":
+              return <OpenSourcery />;
             default:
               return (
                 <View
