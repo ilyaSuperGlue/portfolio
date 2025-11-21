@@ -10,7 +10,7 @@ import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { colors } from "@/shared/constant/colors";
 import Header from "@/shared/ui/Header";
 import useFontReady from "@/shared/lib/useFontReady";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import webApi from "@/shared/lib/webApi";
 import Typography from "@/shared/ui/Typography";
 import Animated, {
@@ -22,6 +22,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Icon from "@/shared/ui/Icon";
 import useCopyToClipboard from "@/shared/lib/copyToClipboard";
+import { ActivityIndicator } from "react-native-web";
 
 interface IDemoFeat {
   snack: {
@@ -36,7 +37,8 @@ interface IDemoFeat {
 
 const DemoFeat = ({ liveComponent, snack, title, npm, github }: IDemoFeat) => {
   const { styles, breakpoint } = useStyles(StyleSheet);
-  useFontReady();
+  const [fakeAhLoad, setFakeAhLoad] = useState(true);
+  const { fontReady } = useFontReady();
   const router = useRouter();
   const [mode, setMode] = useState<"live" | "snack">("snack");
   const { RenderClipboard, copyToClipboard } = useCopyToClipboard();
@@ -91,6 +93,10 @@ const DemoFeat = ({ liveComponent, snack, title, npm, github }: IDemoFeat) => {
     if (doc) {
       doc.title = title;
     }
+    //because JS not ready yet
+    setTimeout(() => {
+      setFakeAhLoad(false);
+    }, 0);
   }, [title]);
 
   const goToGithub = useCallback(() => {
@@ -115,6 +121,25 @@ const DemoFeat = ({ liveComponent, snack, title, npm, github }: IDemoFeat) => {
       </div>
     );
   }, [snack]);
+
+  if (!fontReady || fakeAhLoad) {
+    return (
+      <>
+        <Stack.Screen options={{ title, headerShown: false }} />
+        <View
+          style={[
+            styles.container,
+            {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+          ]}
+        >
+          <ActivityIndicator size={"large"} animating color={colors.primary} />
+        </View>
+      </>
+    );
+  }
 
   return (
     <View style={styles.container}>
