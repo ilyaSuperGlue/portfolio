@@ -138,7 +138,10 @@ export default function Header({ type = "parent", ...props }: IHeader) {
             entering={LightSpeedInLeft}
             exiting={LightSpeedOutLeft}
           >
-            <Pressable style={styles.containerHead(width, height)}>
+            <Pressable
+              style={styles.containerHead(width, height)}
+              onPress={() => onPress("home")}
+            >
               <Animated.Image
                 source={iconUpscale}
                 resizeMode="contain"

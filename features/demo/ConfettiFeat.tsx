@@ -1,0 +1,25 @@
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useConfetti } from "@hikaaam/react-native-reanimated-confetti";
+
+export default function ConfettiFeat() {
+  const { RenderConfetti, startconfetti, isPlaying } = useConfetti();
+  return (
+    <View style={styles.container}>
+      <RenderConfetti />
+      <TouchableOpacity onPress={startconfetti} disabled={isPlaying}>
+        <Text style={styles.text}>{isPlaying ? "playing" : "press me!"}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 2000,
+  },
+  text: { color: "#000", fontSize: 16 },
+});
