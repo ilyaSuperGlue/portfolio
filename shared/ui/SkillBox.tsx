@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import React from "react";
+import React, { useMemo } from "react";
 import Typography from "./Typography";
 import Icon, { iIconType } from "./Icon";
 import { colors } from "../constant/colors";
@@ -16,7 +16,18 @@ export interface iSkillBox {
 }
 
 const SkillBox = ({ icon, text }: iSkillBox) => {
-  const { styles } = useStyles(StyleSheet);
+  const { styles, breakpoint } = useStyles(StyleSheet);
+  const defaultIconSize = useMemo(() => {
+    switch (breakpoint) {
+      case "xs":
+        return 20;
+      case "sm":
+        return 30;
+      default:
+        return 60;
+    }
+  }, [breakpoint]);
+
   return (
     <Animated.View
       style={styles.container}
@@ -27,11 +38,11 @@ const SkillBox = ({ icon, text }: iSkillBox) => {
         name={icon?.name}
         type={icon?.type ?? "MaterialCommunityIcon"}
         color={icon?.color ?? colors.black}
-        size={60}
+        size={defaultIconSize}
       />
       <Typography
         type="Poppins_400Regular"
-        style={{ fontSize: 14, letterSpacing: 1, fontWeight: "500" }}
+        style={{ fontSize: 12, letterSpacing: 1, fontWeight: "500" }}
       >
         {text}
       </Typography>
