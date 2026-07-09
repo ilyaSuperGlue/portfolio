@@ -12,6 +12,7 @@ interface iButton {
   text?: string;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
+  disabled?: boolean;
 }
 
 const Button = (props?: iButton) => {
@@ -31,6 +32,7 @@ const Button = (props?: iButton) => {
     <TouchableOpacity
       style={[styles.container, props?.style]}
       onPress={props?.onPress}
+      disabled={props?.disabled}
     >
       {props?.withIcon && (
         <Icon

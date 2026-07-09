@@ -27,11 +27,11 @@ const SkillBox = ({ icon, text }: iSkillBox) => {
         name={icon?.name}
         type={icon?.type ?? "MaterialCommunityIcon"}
         color={icon?.color ?? colors.black}
-        size={100}
+        size={60}
       />
       <Typography
         type="Poppins_400Regular"
-        style={{ fontSize: 14, letterSpacing: 1 }}
+        style={{ fontSize: 14, letterSpacing: 1, fontWeight: "500" }}
       >
         {text}
       </Typography>
@@ -43,12 +43,13 @@ export default SkillBox;
 
 const StyleSheet = createStyleSheet({
   container: {
+    flexDirection: "row",
     padding: 20,
+    paddingVertical: 10,
     backgroundColor: "#fff",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#eaeaeaaa",
-    justifyContent: "center",
     alignItems: "center",
     margin: 15,
     shadowColor: "#000",
@@ -59,10 +60,6 @@ const StyleSheet = createStyleSheet({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: {
-      xs: "80%",
-      sm: "45%",
-      md: "30%",
-    },
+    gap: 10,
   },
 });

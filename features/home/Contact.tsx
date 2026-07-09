@@ -1,12 +1,13 @@
-import { Linking, TextInput, View } from "react-native";
-import React, { useState } from "react";
-import Animated, { LightSpeedInLeft } from "react-native-reanimated";
+import { FlatList, Linking, Pressable, TextInput, View } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import Animated, { LightSpeedInLeft, measure } from "react-native-reanimated";
 import { colors } from "@/shared/constant/colors";
 import Typography from "@/shared/ui/Typography";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import Button from "@/shared/ui/Button";
 import { link } from "@/shared/constant/link";
 import Icon from "@/shared/ui/Icon";
+import { contactBtn } from "./constant/const-contant";
 
 const Contact = () => {
   const { styles } = useStyles(StyleSheet);
@@ -14,6 +15,19 @@ const Contact = () => {
     subject: "",
     message: "",
   });
+
+  const clear = useCallback(() => {
+    setMail({
+      subject: "",
+      message: "",
+    });
+  }, []);
+
+  const isDisabled = useMemo(
+    () => subject.length <= 0 || message.length <= 0,
+    [message, subject],
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.sectionRow}>
@@ -22,79 +36,45 @@ const Contact = () => {
           entering={LightSpeedInLeft.delay(100)}
         >
           <Typography type="Poppins_700Bold" style={styles.title}>
-            Get in touch with me
+            Get in touch
           </Typography>
           <Typography type="Poppins_500Medium" style={[styles.textSection]}>
-            I am Available for Freelance or Fulltime Positions.
+            I am Available for Freelance or Fulltime opportunities.
           </Typography>
           <Typography type="Poppins_500Medium" style={[styles.textSection]}>
-            You can contact me via :
+            Feels free ro reach out
           </Typography>
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              withIcon
-              iconProps={{
-                name: "logo-linkedin",
-                color: colors.black,
-              }}
-              text="LinkedIn"
-              style={styles.btnLinkedin}
-              textProps={{
-                style: styles.btnText,
-                type: "Poppins_700Bold",
-              }}
-              onPress={() =>
-                Linking.openURL(
-                  "https://linkedin.com/in/ilyas-abdurahman-yusuf"
-                )
-              }
-            />
-            <Button
-              withIcon
-              iconProps={{
-                name: "email-outline",
-                color: colors.black,
-                type: "MaterialCommunityIcon",
-              }}
-              text="Email"
-              style={styles.btnLinkedin}
-              textProps={{
-                style: styles.btnText,
-                type: "Poppins_700Bold",
-              }}
-              onPress={() => {
-                Linking.openURL(
-                  "mailto:ilyasabdurahmanyusuf@gmail.com?subject=" +
-                    subject +
-                    "&body=" +
-                    message
-                );
-              }}
-            />
 
-            <Button
-              withIcon
-              iconProps={{
-                name: "file-search",
-                color: colors.black,
-                type: "AntDesign",
-              }}
-              text="Checkout My CV"
-              style={[styles.btnLinkedin]}
-              textProps={{
-                style: styles.btnText,
-                type: "Poppins_700Bold",
-              }}
-              onPress={() => Linking.openURL(link.cv)}
-            />
-          </View>
+          <FlatList
+            data={contactBtn}
+            renderItem={({ item }) => {
+              return (
+                <Button
+                  key={item.icon}
+                  withIcon
+                  iconProps={{
+                    name: item.icon,
+                    color: colors.primary,
+                    type: item.type,
+                  }}
+                  text={item.text}
+                  style={styles.btnLinkedin}
+                  textProps={{
+                    style: styles.btnText,
+                    type: "Poppins_700Bold",
+                  }}
+                  onPress={() => {
+                    const params = [];
+                    if (item.text === "Email") {
+                      params.push(subject, message);
+                    }
+                    item.onPress(...params);
+                  }}
+                />
+              );
+            }}
+            scrollEnabled={false}
+          />
         </Animated.View>
         <Animated.View
           style={styles.row}
@@ -103,38 +83,86 @@ const Contact = () => {
           <Typography type="Poppins_700Bold" style={styles.title}>
             Send Me a Message
           </Typography>
-          <View>
-            <Typography type="Poppins_600SemiBold" style={styles.textLabel}>
-              Subject
-            </Typography>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(subject) => {
-                setMail((prev) => ({ ...prev, subject }));
-              }}
-            />
-            <Typography type="Poppins_600SemiBold" style={styles.textLabel}>
-              Message
-            </Typography>
-            <TextInput
-              style={styles.textInputArea}
-              multiline
-              onChangeText={(message) => {
-                setMail((prev) => ({ ...prev, message }));
-              }}
-            />
-            <Button
-              text="Send Message"
-              style={{ width: null }}
-              onPress={() =>
-                Linking.openURL(
-                  "mailto:ilyasabdurahmanyusuf@gmail.com?subject=" +
-                    subject +
-                    "&body=" +
-                    message
-                )
-              }
-            />
+          <View style={styles.mailBox}>
+            <View style={styles.mailHeader}>
+              <Icon
+                type={"Ionicons"}
+                name={"mail-outline"}
+                size={20}
+                color={colors.white}
+              />
+              <Typography
+                type="Poppins_400Regular"
+                style={{
+                  fontSize: 16,
+                  fontWeight: "500",
+                  color: colors.white,
+                }}
+              >
+                New message
+              </Typography>
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={(subject) => {
+                  setMail((prev) => ({ ...prev, subject }));
+                }}
+                placeholder="Subject"
+                placeholderTextColor={colors.black + "aa"}
+                value={subject}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInputArea}
+                multiline
+                onChangeText={(message) => {
+                  setMail((prev) => ({ ...prev, message }));
+                }}
+                placeholder="Body"
+                placeholderTextColor={colors.black + "aa"}
+                value={message}
+              />
+            </View>
+            <View style={[styles.mailHeader, styles.mailFooter]}>
+              <Pressable onPress={clear}>
+                <Icon name="delete" color={colors.white} size={25} />
+              </Pressable>
+              <Button
+                disabled={isDisabled}
+                withIcon
+                iconProps={{
+                  name: "send-sharp",
+                  color: isDisabled ? "#eaeaeaaa" : colors.white,
+                  size: 20,
+                }}
+                text="Send"
+                style={{
+                  width: null,
+                  backgroundColor: "transparent",
+
+                  borderColor: isDisabled ? colors.black : colors.white,
+                }}
+                onPress={() => {
+                  if (!isDisabled) {
+                    Linking.openURL(
+                      "mailto:ilyasabdurahmanyusuf@gmail.com?subject=" +
+                        subject +
+                        "&body=" +
+                        message,
+                    );
+                  }
+                }}
+                textProps={{
+                  style: {
+                    fontSize: 14,
+                    fontWeight: "400",
+                    color: isDisabled ? "#eaeaeaaa" : colors.white,
+                  },
+                }}
+              />
+            </View>
           </View>
         </Animated.View>
       </View>
@@ -186,7 +214,6 @@ const StyleSheet = createStyleSheet((theme) => ({
       sm: 100,
     },
     justifyContent: "flex-start",
-    alignItems: "center",
   },
   sectionRow: {
     flexWrap: "wrap",
@@ -206,33 +233,22 @@ const StyleSheet = createStyleSheet((theme) => ({
       sm: 30,
     },
     color: colors.black,
-    textAlign: "center",
     marginBottom: 5,
   },
   btnLinkedin: {
-    marginRight: {
-      xs: 5,
-      sm: 28,
-    },
     backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: "#999999aa",
     marginTop: {
       xs: 10,
       sm: 20,
     },
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    alignItems: "center",
+    justifyContent: "flex-start",
     width: {
       xs: "100%",
-      md: "48%",
+      md: "38%",
     },
+    padding: 0,
+    marginBottom: 0,
   },
   textLabel: {
     fontSize: {
@@ -244,39 +260,14 @@ const StyleSheet = createStyleSheet((theme) => ({
   textInput: {
     padding: 10,
     backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#eaeaeaaa",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    borderRadius: 5,
-    marginBottom: 20,
-    minWidth: {
-      xs: 250,
-      sm: 500,
-    },
+    borderRadius: 10,
   },
   textInputArea: {
     padding: 10,
     backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#eaeaeaaa",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    borderRadius: 5,
-    marginBottom: 20,
     minHeight: 200,
+    borderRadius: 10,
+    marginBottom: 10,
   },
   btnCV: {
     width: {
@@ -297,11 +288,43 @@ const StyleSheet = createStyleSheet((theme) => ({
       xs: 10,
       sm: 30,
     },
+    textAlign: "left",
   },
   btnText: {
-    color: colors.black,
+    color: colors.primary,
     fontWeight: "700",
     letterSpacing: 1.2,
     fontSize: 20,
+  },
+  inputContainer: {
+    borderBottomWidth: 2,
+    borderColor: colors.black,
+    padding: 10,
+    paddingHorizontal: 15,
+  },
+  mailHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    paddingHorizontal: 20,
+    backgroundColor: colors.black,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    gap: 20,
+  },
+  mailFooter: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    justifyContent: "space-between",
+  },
+  mailBox: {
+    flex: 1,
+    borderWidth: 2,
+    borderColor: colors.black,
+    borderTopWidth: 0,
+    borderRadius: 22,
+    backgroundColor: "#eaeaea",
   },
 }));
